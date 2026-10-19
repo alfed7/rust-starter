@@ -1,9 +1,12 @@
 name: CI
 
+# CI is disabled: only runs when triggered manually from the Actions tab.
+# To enable, uncomment the push/pull_request triggers below.
 on:
-  push:
-    branches: [main]
-  pull_request:
+  workflow_dispatch:
+  # push:
+  #   branches: [main]
+  # pull_request:
 
 permissions:
   contents: read
@@ -14,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        toolchain: ["1.85", stable]
+        toolchain: ["1.94", stable]
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@master

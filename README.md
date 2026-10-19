@@ -4,8 +4,8 @@ A practical starter for Rust HTTP API services using Axum and Tokio.
 
 ## Included
 
-- Layered configuration from environment variables with a checked-in
-  [`.env.example`](.env.example).
+- Separate development and production environment files with checked-in
+  [development](.env.development.example) and [production](.env.production.example) examples.
 - `GET /health` readiness endpoint and versioned `/api/v1` router.
 - JSON request validation and consistent JSON error responses.
 - Request IDs, structured tracing, CORS, body-size limits, and graceful shutdown.
@@ -15,18 +15,25 @@ A practical starter for Rust HTTP API services using Axum and Tokio.
 
 1. Rename the crate and update the package metadata in `Cargo.toml`.
 2. Replace `AppState` and the example `GET /api/v1/greeting` endpoint with your domain.
-3. Copy `.env.example` to `.env` and adjust local settings as needed.
+3. Copy `.env.development.example` to `.env.development` and adjust local settings as needed.
 
 ```shell
 cargo run
 ```
 
-Run the server with verbose logging:
+For production, copy `.env.production.example` to `.env.production`, adjust the settings,
+and select it with `APP_ENV`:
 
 ```powershell
-$env:RUST_LOG = "appname=debug,lettre=debug"
-cargo run -- serve --config appname.toml
+$env:APP_ENV = "production"
+cargo run --release
 ```
+
+`APP_ENV` accepts `development` (the default) or `production`, independently of the Cargo build
+profile. The selected file is loaded from the working directory. Existing shell
+environment variables take precedence. A missing file is allowed for deployments
+that provide all settings through environment variables; malformed files fail at
+startup. The old `.env` file is no longer loaded. Both local files are ignored by Git.
 
 The server listens at `http://127.0.0.1:3000` by default.
 
